@@ -171,15 +171,6 @@
                         <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['First Name (Preferred)'] !== null ? autolinker.link(feature.properties['First Name (Preferred)'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <th scope="row">State Code</th>\
                         <td>' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
@@ -268,8 +259,8 @@
                         <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">First Name (Preferred)</th>\
-                        <td>' + (feature.properties['First Name (Preferred)'] !== null ? autolinker.link(feature.properties['First Name (Preferred)'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">First Name</th>\
+                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
@@ -392,8 +383,8 @@
                         <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">First Name (Preferred)</th>\
-                        <td>' + (feature.properties['First Name (Preferred)'] !== null ? autolinker.link(feature.properties['First Name (Preferred)'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">First Name</th>\
+                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
@@ -512,8 +503,8 @@
                         <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">First Name (Preferred)</th>\
-                        <td>' + (feature.properties['First Name (Preferred)'] !== null ? autolinker.link(feature.properties['First Name (Preferred)'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">First Name</th>\
+                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
@@ -623,7 +614,7 @@
                 abstract.show = function () {
                     this._div.classList.remove("abstract");
                     this._div.classList.add("abstractUncollapsed");
-                    this._div.innerHTML = 'NHP Class of 1971 Directory:<br /><br />Radio Button Section has essentially 2 sections:<br />  - First Section (Top 4 Radio Buttons) control "Who/What" is displayed on the map.<br />  - Second Section (Bottom 6 Radio Buttons) control the map "Format".<br /><br />Note: In general, select only 1 Radio Button from each section<br />    - Map Format: If multiple map formats are selected. the first one takes precedence.<br /><br />Filters: (On far right)<br />  - When multiple Filters are selected, they work in conjunction as a composite filter. <br /><br />When more than 1 person lives at the same town, set:<br />    - "The Class of 1971-Individuals" = NOT Selected<br />    - "The Class of 1971-Clustered"  =  Selected<br /><br />';
+                    this._div.innerHTML = 'NHP Class of 1971 Directory - Master:<br /><br />Radio Button Section has essentially 2 sections:<br />  - First Section (Top 4 Radio Buttons) control "Who/What" is displayed on the map.<br />  - Second Section (Bottom 6 Radio Buttons) control the map "Format".<br /><br />Note: In general, select only 1 Radio Button from each section<br />    - Map Format: If multiple map formats are selected. the first one takes precedence.<br /><br />Filters: (On far right)<br />  - When multiple Filters are selected, they work in conjunction as a composite filter. <br /><br />When more than 1 person lives at the same town, set:<br />    - "Master-Clustered"  =  Selected<br /><br />';
             };
             abstract.addTo(map);
         var osmGeocoder = new L.Control.Geocoder({
@@ -704,7 +695,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Name": "str","State Code": "str","Address Type": "str","Group-Boys-Crew": "str","Group-Class": "str","Deceased?": "str"};
+        var Filters = {"State Code": "str","Name": "str","Group-Class": "str","Deceased?": "str","Group-Boys-Crew": "str","Address Type": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -835,6 +826,67 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_StateCode = document.createElement('div');
+            div_StateCode.id = "div_StateCode";
+            div_StateCode.className= "filterselect";
+            document.getElementById("menu").appendChild(div_StateCode);
+            sel_StateCode = document.createElement('select');
+            sel_StateCode.multiple = true;
+            sel_StateCode.size = 10;
+            sel_StateCode.id = "sel_StateCode";
+            var StateCode_options_str = "<option value='' unselected></option>";
+            sel_StateCode.onchange = function(){filterFunc()};
+            StateCode_options_str  += '<option value="AR">AR</option>';
+            StateCode_options_str  += '<option value="AZ">AZ</option>';
+            StateCode_options_str  += '<option value="CA">CA</option>';
+            StateCode_options_str  += '<option value="CO">CO</option>';
+            StateCode_options_str  += '<option value="CT">CT</option>';
+            StateCode_options_str  += '<option value="DE">DE</option>';
+            StateCode_options_str  += '<option value="FL">FL</option>';
+            StateCode_options_str  += '<option value="FRANCE">FRANCE</option>';
+            StateCode_options_str  += '<option value="GA">GA</option>';
+            StateCode_options_str  += '<option value="HI">HI</option>';
+            StateCode_options_str  += '<option value="IL">IL</option>';
+            StateCode_options_str  += '<option value="IN">IN</option>';
+            StateCode_options_str  += '<option value="KY">KY</option>';
+            StateCode_options_str  += '<option value="MA">MA</option>';
+            StateCode_options_str  += '<option value="MD">MD</option>';
+            StateCode_options_str  += '<option value="MI">MI</option>';
+            StateCode_options_str  += '<option value="MN">MN</option>';
+            StateCode_options_str  += '<option value="MO">MO</option>';
+            StateCode_options_str  += '<option value="NC">NC</option>';
+            StateCode_options_str  += '<option value="NJ">NJ</option>';
+            StateCode_options_str  += '<option value="NM">NM</option>';
+            StateCode_options_str  += '<option value="NV">NV</option>';
+            StateCode_options_str  += '<option value="NY">NY</option>';
+            StateCode_options_str  += '<option value="OH">OH</option>';
+            StateCode_options_str  += '<option value="OK">OK</option>';
+            StateCode_options_str  += '<option value="PA">PA</option>';
+            StateCode_options_str  += '<option value="RI">RI</option>';
+            StateCode_options_str  += '<option value="SC">SC</option>';
+            StateCode_options_str  += '<option value="TN">TN</option>';
+            StateCode_options_str  += '<option value="TX">TX</option>';
+            StateCode_options_str  += '<option value="VA">VA</option>';
+            StateCode_options_str  += '<option value="WI">WI</option>';
+            sel_StateCode.innerHTML = StateCode_options_str;
+            div_StateCode.appendChild(sel_StateCode);
+            var lab_StateCode = document.createElement('div');
+            lab_StateCode.innerHTML = 'State Code';
+            lab_StateCode.className = 'filterlabel';
+            div_StateCode.appendChild(lab_StateCode);
+            var reset_StateCode = document.createElement('div');
+            reset_StateCode.innerHTML = 'clear filter';
+            reset_StateCode.className = 'filterlabel';
+            reset_StateCode.onclick = function() {
+                var options = document.getElementById("sel_StateCode").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_StateCode.appendChild(reset_StateCode);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_Name = document.createElement('div');
             div_Name.id = "div_Name";
             div_Name.className= "filterselect";
@@ -845,7 +897,6 @@
             sel_Name.id = "sel_Name";
             var Name_options_str = "<option value='' unselected></option>";
             sel_Name.onchange = function(){filterFunc()};
-            Name_options_str  += '<option value="Alaska (1)">Alaska (1)</option>';
             Name_options_str  += '<option value="Alfino, Philip">Alfino, Philip</option>';
             Name_options_str  += '<option value="Alverson, Jay">Alverson, Jay</option>';
             Name_options_str  += '<option value="Ammon, Robert">Ammon, Robert</option>';
@@ -873,19 +924,6 @@
             Name_options_str  += '<option value="Bernstein, Andrew">Bernstein, Andrew</option>';
             Name_options_str  += '<option value="Bertolini (Porr), Tina">Bertolini (Porr), Tina</option>';
             Name_options_str  += '<option value="Biancanelli, Joseph (Joe)">Biancanelli, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-00, Joseph (Joe)">Biancanelli-00, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-01, Joseph (Joe)">Biancanelli-01, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-02, Joseph (Joe)">Biancanelli-02, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-03, Joseph (Joe)">Biancanelli-03, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-04, Joseph (Joe)">Biancanelli-04, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-05, Joseph (Joe)">Biancanelli-05, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-06, Joseph (Joe)">Biancanelli-06, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-07, Joseph (Joe)">Biancanelli-07, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-08, Joseph (Joe)">Biancanelli-08, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-09, Joseph (Joe)">Biancanelli-09, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-10, Joseph (Joe)">Biancanelli-10, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-11, Joseph (Joe)">Biancanelli-11, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Biancanelli-12, Joseph (Joe)">Biancanelli-12, Joseph (Joe)</option>';
             Name_options_str  += '<option value="Boardman, James">Boardman, James</option>';
             Name_options_str  += '<option value="Boch, Richard">Boch, Richard</option>';
             Name_options_str  += '<option value="Bogart (Hurlburt), Helen">Bogart (Hurlburt), Helen</option>';
@@ -916,7 +954,7 @@
             Name_options_str  += '<option value="Colefield, Steven">Colefield, Steven</option>';
             Name_options_str  += '<option value="Coleman, Paul A.">Coleman, Paul A.</option>';
             Name_options_str  += '<option value="Colorado (3)">Colorado (3)</option>';
-            Name_options_str  += '<option value="Connecticut (16)">Connecticut (16)</option>';
+            Name_options_str  += '<option value="Connecticut (8)">Connecticut (8)</option>';
             Name_options_str  += '<option value="Cornelius, Lester">Cornelius, Lester</option>';
             Name_options_str  += '<option value="Cosenza, Victor">Cosenza, Victor</option>';
             Name_options_str  += '<option value="Croker, Virginia">Croker, Virginia</option>';
@@ -993,19 +1031,6 @@
             Name_options_str  += '<option value="Harbich, Frederic">Harbich, Frederic</option>';
             Name_options_str  += '<option value="Hawaii (1)">Hawaii (1)</option>';
             Name_options_str  += '<option value="Healy, Peter Burke">Healy, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-00-U (N/A-00-U), Peter-00-U (Petey-00-U)Burke-00-U">Healy-00-U (N/A-00-U), Peter-00-U (Petey-00-U)Burke-00-U</option>';
-            Name_options_str  += '<option value="Healy-01, Peter Burke">Healy-01, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-02, Peter Burke">Healy-02, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-03, Peter Burke">Healy-03, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-04, Peter Burke">Healy-04, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-05, Peter Burke">Healy-05, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-06, Peter Burke">Healy-06, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-07, Peter Burke">Healy-07, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-08, Peter Burke">Healy-08, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-09, Peter Burke">Healy-09, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-10, Peter Burke">Healy-10, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-11, Peter Burke">Healy-11, Peter Burke</option>';
-            Name_options_str  += '<option value="Healy-12, Peter Burke">Healy-12, Peter Burke</option>';
             Name_options_str  += '<option value="Hejduk (Vega), Nancy">Hejduk (Vega), Nancy</option>';
             Name_options_str  += '<option value="Herlinger (Stump), Carole">Herlinger (Stump), Carole</option>';
             Name_options_str  += '<option value="Hiltz, Joan">Hiltz, Joan</option>';
@@ -1133,7 +1158,7 @@
             Name_options_str  += '<option value="Payne, Robert">Payne, Robert</option>';
             Name_options_str  += '<option value="Pelletiere, John">Pelletiere, John</option>';
             Name_options_str  += '<option value="Pelletiere, Joseph (Joe)">Pelletiere, Joseph (Joe)</option>';
-            Name_options_str  += '<option value="Pennsylvania (21)">Pennsylvania (21)</option>';
+            Name_options_str  += '<option value="Pennsylvania (14)">Pennsylvania (14)</option>';
             Name_options_str  += '<option value="Perna, Andrew">Perna, Andrew</option>';
             Name_options_str  += '<option value="Perrotti (Lenz), Maryann">Perrotti (Lenz), Maryann</option>';
             Name_options_str  += '<option value="Pesa, Frank">Pesa, Frank</option>';
@@ -1263,149 +1288,22 @@
             div_Name.appendChild(reset_Name);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_StateCode = document.createElement('div');
-            div_StateCode.id = "div_StateCode";
-            div_StateCode.className= "filterselect";
-            document.getElementById("menu").appendChild(div_StateCode);
-            sel_StateCode = document.createElement('select');
-            sel_StateCode.multiple = true;
-            sel_StateCode.size = 10;
-            sel_StateCode.id = "sel_StateCode";
-            var StateCode_options_str = "<option value='' unselected></option>";
-            sel_StateCode.onchange = function(){filterFunc()};
-            StateCode_options_str  += '<option value="AK">AK</option>';
-            StateCode_options_str  += '<option value="AR">AR</option>';
-            StateCode_options_str  += '<option value="AZ">AZ</option>';
-            StateCode_options_str  += '<option value="CA">CA</option>';
-            StateCode_options_str  += '<option value="CO">CO</option>';
-            StateCode_options_str  += '<option value="CT">CT</option>';
-            StateCode_options_str  += '<option value="DE">DE</option>';
-            StateCode_options_str  += '<option value="FL">FL</option>';
-            StateCode_options_str  += '<option value="FRANCE">FRANCE</option>';
-            StateCode_options_str  += '<option value="GA">GA</option>';
-            StateCode_options_str  += '<option value="HI">HI</option>';
-            StateCode_options_str  += '<option value="IL">IL</option>';
-            StateCode_options_str  += '<option value="IN">IN</option>';
-            StateCode_options_str  += '<option value="KY">KY</option>';
-            StateCode_options_str  += '<option value="MA">MA</option>';
-            StateCode_options_str  += '<option value="MD">MD</option>';
-            StateCode_options_str  += '<option value="MI">MI</option>';
-            StateCode_options_str  += '<option value="MN">MN</option>';
-            StateCode_options_str  += '<option value="MO">MO</option>';
-            StateCode_options_str  += '<option value="NC">NC</option>';
-            StateCode_options_str  += '<option value="NJ">NJ</option>';
-            StateCode_options_str  += '<option value="NM">NM</option>';
-            StateCode_options_str  += '<option value="NV">NV</option>';
-            StateCode_options_str  += '<option value="NY">NY</option>';
-            StateCode_options_str  += '<option value="OH">OH</option>';
-            StateCode_options_str  += '<option value="OK">OK</option>';
-            StateCode_options_str  += '<option value="PA">PA</option>';
-            StateCode_options_str  += '<option value="RI">RI</option>';
-            StateCode_options_str  += '<option value="SC">SC</option>';
-            StateCode_options_str  += '<option value="TN">TN</option>';
-            StateCode_options_str  += '<option value="TX">TX</option>';
-            StateCode_options_str  += '<option value="VA">VA</option>';
-            StateCode_options_str  += '<option value="WI">WI</option>';
-            sel_StateCode.innerHTML = StateCode_options_str;
-            div_StateCode.appendChild(sel_StateCode);
-            var lab_StateCode = document.createElement('div');
-            lab_StateCode.innerHTML = 'State Code';
-            lab_StateCode.className = 'filterlabel';
-            div_StateCode.appendChild(lab_StateCode);
-            var reset_StateCode = document.createElement('div');
-            reset_StateCode.innerHTML = 'clear filter';
-            reset_StateCode.className = 'filterlabel';
-            reset_StateCode.onclick = function() {
-                var options = document.getElementById("sel_StateCode").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_StateCode.appendChild(reset_StateCode);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_AddressType = document.createElement('div');
-            div_AddressType.id = "div_AddressType";
-            div_AddressType.className= "filterselect";
-            document.getElementById("menu").appendChild(div_AddressType);
-            sel_AddressType = document.createElement('select');
-            sel_AddressType.multiple = true;
-            sel_AddressType.size = 3;
-            sel_AddressType.id = "sel_AddressType";
-            var AddressType_options_str = "<option value='' unselected></option>";
-            sel_AddressType.onchange = function(){filterFunc()};
-            AddressType_options_str  += '<option value="N/A">N/A</option>';
-            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
-            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
-            sel_AddressType.innerHTML = AddressType_options_str;
-            div_AddressType.appendChild(sel_AddressType);
-            var lab_AddressType = document.createElement('div');
-            lab_AddressType.innerHTML = 'Address Type';
-            lab_AddressType.className = 'filterlabel';
-            div_AddressType.appendChild(lab_AddressType);
-            var reset_AddressType = document.createElement('div');
-            reset_AddressType.innerHTML = 'clear filter';
-            reset_AddressType.className = 'filterlabel';
-            reset_AddressType.onclick = function() {
-                var options = document.getElementById("sel_AddressType").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_AddressType.appendChild(reset_AddressType);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_GroupBoysCrew = document.createElement('div');
-            div_GroupBoysCrew.id = "div_GroupBoysCrew";
-            div_GroupBoysCrew.className= "filterselect";
-            document.getElementById("menu").appendChild(div_GroupBoysCrew);
-            sel_GroupBoysCrew = document.createElement('select');
-            sel_GroupBoysCrew.multiple = true;
-            sel_GroupBoysCrew.size = 5;
-            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
-            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
-            sel_GroupBoysCrew.onchange = function(){filterFunc()};
-            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
-            GroupBoysCrew_options_str  += '<option value="N/A">N/A</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
-            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
-            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
-            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
-            var lab_GroupBoysCrew = document.createElement('div');
-            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
-            lab_GroupBoysCrew.className = 'filterlabel';
-            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
-            var reset_GroupBoysCrew = document.createElement('div');
-            reset_GroupBoysCrew.innerHTML = 'clear filter';
-            reset_GroupBoysCrew.className = 'filterlabel';
-            reset_GroupBoysCrew.onclick = function() {
-                var options = document.getElementById("sel_GroupBoysCrew").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
             var div_GroupClass = document.createElement('div');
             div_GroupClass.id = "div_GroupClass";
             div_GroupClass.className= "filterselect";
             document.getElementById("menu").appendChild(div_GroupClass);
             sel_GroupClass = document.createElement('select');
             sel_GroupClass.multiple = true;
-            sel_GroupClass.size = 5;
+            sel_GroupClass.size = 6;
             sel_GroupClass.id = "sel_GroupClass";
             var GroupClass_options_str = "<option value='' unselected></option>";
             sel_GroupClass.onchange = function(){filterFunc()};
+            GroupClass_options_str  += '<option value="Country">Country</option>';
             GroupClass_options_str  += '<option value="Maria Regina Class of 1971">Maria Regina Class of 1971</option>';
-            GroupClass_options_str  += '<option value="N/A">N/A</option>';
             GroupClass_options_str  += '<option value="NHP Class of 1971">NHP Class of 1971</option>';
             GroupClass_options_str  += '<option value="NHP Class of 1971 - DECEASED">NHP Class of 1971 - DECEASED</option>';
             GroupClass_options_str  += '<option value="NHP Class of 1972">NHP Class of 1972</option>';
+            GroupClass_options_str  += '<option value="State">State</option>';
             sel_GroupClass.innerHTML = GroupClass_options_str;
             div_GroupClass.appendChild(sel_GroupClass);
             var lab_GroupClass = document.createElement('div');
@@ -1455,6 +1353,74 @@
                 filterFunc();
             };
             div_Deceased.appendChild(reset_Deceased);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_GroupBoysCrew = document.createElement('div');
+            div_GroupBoysCrew.id = "div_GroupBoysCrew";
+            div_GroupBoysCrew.className= "filterselect";
+            document.getElementById("menu").appendChild(div_GroupBoysCrew);
+            sel_GroupBoysCrew = document.createElement('select');
+            sel_GroupBoysCrew.multiple = true;
+            sel_GroupBoysCrew.size = 6;
+            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
+            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
+            sel_GroupBoysCrew.onchange = function(){filterFunc()};
+            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
+            GroupBoysCrew_options_str  += '<option value="Country">Country</option>';
+            GroupBoysCrew_options_str  += '<option value="State">State</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
+            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
+            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
+            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
+            var lab_GroupBoysCrew = document.createElement('div');
+            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
+            lab_GroupBoysCrew.className = 'filterlabel';
+            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
+            var reset_GroupBoysCrew = document.createElement('div');
+            reset_GroupBoysCrew.innerHTML = 'clear filter';
+            reset_GroupBoysCrew.className = 'filterlabel';
+            reset_GroupBoysCrew.onclick = function() {
+                var options = document.getElementById("sel_GroupBoysCrew").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_AddressType = document.createElement('div');
+            div_AddressType.id = "div_AddressType";
+            div_AddressType.className= "filterselect";
+            document.getElementById("menu").appendChild(div_AddressType);
+            sel_AddressType = document.createElement('select');
+            sel_AddressType.multiple = true;
+            sel_AddressType.size = 4;
+            sel_AddressType.id = "sel_AddressType";
+            var AddressType_options_str = "<option value='' unselected></option>";
+            sel_AddressType.onchange = function(){filterFunc()};
+            AddressType_options_str  += '<option value="Country">Country</option>';
+            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
+            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
+            AddressType_options_str  += '<option value="State">State</option>';
+            sel_AddressType.innerHTML = AddressType_options_str;
+            div_AddressType.appendChild(sel_AddressType);
+            var lab_AddressType = document.createElement('div');
+            lab_AddressType.innerHTML = 'Address Type';
+            lab_AddressType.className = 'filterlabel';
+            div_AddressType.appendChild(lab_AddressType);
+            var reset_AddressType = document.createElement('div');
+            reset_AddressType.innerHTML = 'clear filter';
+            reset_AddressType.className = 'filterlabel';
+            reset_AddressType.onclick = function() {
+                var options = document.getElementById("sel_AddressType").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_AddressType.appendChild(reset_AddressType);
         resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
         map.on("zoomend", function(){
             resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
