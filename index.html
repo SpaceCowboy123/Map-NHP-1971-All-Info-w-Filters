@@ -69,6 +69,19 @@
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
@@ -180,6 +193,10 @@
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
         }
 
         function style_MasterStateTotals_6_0() {
@@ -244,66 +261,70 @@
                     </tr>\
                     <tr>\
                         <th scope="row">Deceased?</th>\
-                        <td>' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Deceased?">' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Class</th>\
-                        <td>' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Class">' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Boys-Crew</th>\
-                        <td>' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Boys-Crew">' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Last Name (Maiden Name)</th>\
-                        <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Last Name (Maiden Name)">' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">First Name</th>\
-                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="First Name">' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
-                        <td>' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Married Name (Surname)">' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Address Type</th>\
-                        <td>' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Address Type">' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Street</th>\
-                        <td>' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Street">' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">City</th>\
-                        <td>' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="City">' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">State Code</th>\
-                        <td>' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="State Code">' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">ZIP Code</th>\
-                        <td>' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="ZIP Code">' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (1st)</th>\
-                        <td>' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (1st)">' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (2nd)</th>\
-                        <td>' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (2nd)">' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Cell Phone</th>\
-                        <td>' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Cell Phone">' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Home Phone</th>\
-                        <td>' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Home Phone">' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
         }
 
         function style_MasterClustered_7_0() {
@@ -368,66 +389,70 @@
                     </tr>\
                     <tr>\
                         <th scope="row">Deceased?</th>\
-                        <td>' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Deceased?">' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Class</th>\
-                        <td>' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Class">' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Boys-Crew</th>\
-                        <td>' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Boys-Crew">' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Last Name (Maiden Name)</th>\
-                        <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Last Name (Maiden Name)">' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">First Name</th>\
-                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="First Name">' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
-                        <td>' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Married Name (Surname)">' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Address Type</th>\
-                        <td>' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Address Type">' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Street</th>\
-                        <td>' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Street">' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">City</th>\
-                        <td>' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="City">' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">State Code</th>\
-                        <td>' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="State Code">' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">ZIP Code</th>\
-                        <td>' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="ZIP Code">' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (1st)</th>\
-                        <td>' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (1st)">' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (2nd)</th>\
-                        <td>' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (2nd)">' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Cell Phone</th>\
-                        <td>' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Cell Phone">' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Home Phone</th>\
-                        <td>' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Home Phone">' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
         }
 
         function style_MasterwNames_8_0() {
@@ -488,66 +513,70 @@
                     </tr>\
                     <tr>\
                         <th scope="row">Deceased?</th>\
-                        <td>' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Deceased?">' + (feature.properties['Deceased?'] !== null ? autolinker.link(feature.properties['Deceased?'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Class</th>\
-                        <td>' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Class">' + (feature.properties['Group-Class'] !== null ? autolinker.link(feature.properties['Group-Class'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Group-Boys-Crew</th>\
-                        <td>' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Group-Boys-Crew">' + (feature.properties['Group-Boys-Crew'] !== null ? autolinker.link(feature.properties['Group-Boys-Crew'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Last Name (Maiden Name)</th>\
-                        <td>' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Last Name (Maiden Name)">' + (feature.properties['Last Name (Maiden Name)'] !== null ? autolinker.link(feature.properties['Last Name (Maiden Name)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">First Name</th>\
-                        <td>' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="First Name">' + (feature.properties['First Name'] !== null ? autolinker.link(feature.properties['First Name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Married Name (Surname)</th>\
-                        <td>' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Married Name (Surname)">' + (feature.properties['Married Name (Surname)'] !== null ? autolinker.link(feature.properties['Married Name (Surname)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Address Type</th>\
-                        <td>' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Address Type">' + (feature.properties['Address Type'] !== null ? autolinker.link(feature.properties['Address Type'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Street</th>\
-                        <td>' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Street">' + (feature.properties['Street'] !== null ? autolinker.link(feature.properties['Street'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">City</th>\
-                        <td>' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="City">' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">State Code</th>\
-                        <td>' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="State Code">' + (feature.properties['State Code'] !== null ? autolinker.link(feature.properties['State Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">ZIP Code</th>\
-                        <td>' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="ZIP Code">' + (feature.properties['ZIP Code'] !== null ? autolinker.link(feature.properties['ZIP Code'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (1st)</th>\
-                        <td>' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (1st)">' + (feature.properties['eMail (1st)'] !== null ? autolinker.link(feature.properties['eMail (1st)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">eMail (2nd)</th>\
-                        <td>' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="eMail (2nd)">' + (feature.properties['eMail (2nd)'] !== null ? autolinker.link(feature.properties['eMail (2nd)'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Cell Phone</th>\
-                        <td>' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Cell Phone">' + (feature.properties['Cell Phone'] !== null ? autolinker.link(feature.properties['Cell Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Home Phone</th>\
-                        <td>' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Home Phone">' + (feature.properties['Home Phone'] !== null ? autolinker.link(feature.properties['Home Phone'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
         }
 
         function style_Master_9_0() {
@@ -695,7 +724,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"State Code": "str","Name": "str","Group-Class": "str","Deceased?": "str","Group-Boys-Crew": "str","Address Type": "str"};
+        var Filters = {"Deceased?": "str","State Code": "str","Address Type": "str","Group-Boys-Crew": "str","Group-Class": "str","Name": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -826,6 +855,38 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_Deceased = document.createElement('div');
+            div_Deceased.id = "div_Deceased";
+            div_Deceased.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Deceased);
+            sel_Deceased = document.createElement('select');
+            sel_Deceased.multiple = true;
+            sel_Deceased.size = 3;
+            sel_Deceased.id = "sel_Deceased";
+            var Deceased_options_str = "<option value='' unselected></option>";
+            sel_Deceased.onchange = function(){filterFunc()};
+            Deceased_options_str  += '<option value="NULL">NULL</option>';
+            Deceased_options_str  += '<option value="Deceased">Deceased</option>';
+            Deceased_options_str  += '<option value="N/A">N/A</option>';
+            sel_Deceased.innerHTML = Deceased_options_str;
+            div_Deceased.appendChild(sel_Deceased);
+            var lab_Deceased = document.createElement('div');
+            lab_Deceased.innerHTML = 'Deceased?';
+            lab_Deceased.className = 'filterlabel';
+            div_Deceased.appendChild(lab_Deceased);
+            var reset_Deceased = document.createElement('div');
+            reset_Deceased.innerHTML = 'clear filter';
+            reset_Deceased.className = 'filterlabel';
+            reset_Deceased.onclick = function() {
+                var options = document.getElementById("sel_Deceased").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Deceased.appendChild(reset_Deceased);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_StateCode = document.createElement('div');
             div_StateCode.id = "div_StateCode";
             div_StateCode.className= "filterselect";
@@ -887,6 +948,110 @@
             div_StateCode.appendChild(reset_StateCode);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_AddressType = document.createElement('div');
+            div_AddressType.id = "div_AddressType";
+            div_AddressType.className= "filterselect";
+            document.getElementById("menu").appendChild(div_AddressType);
+            sel_AddressType = document.createElement('select');
+            sel_AddressType.multiple = true;
+            sel_AddressType.size = 4;
+            sel_AddressType.id = "sel_AddressType";
+            var AddressType_options_str = "<option value='' unselected></option>";
+            sel_AddressType.onchange = function(){filterFunc()};
+            AddressType_options_str  += '<option value="Country">Country</option>';
+            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
+            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
+            AddressType_options_str  += '<option value="State">State</option>';
+            sel_AddressType.innerHTML = AddressType_options_str;
+            div_AddressType.appendChild(sel_AddressType);
+            var lab_AddressType = document.createElement('div');
+            lab_AddressType.innerHTML = 'Address Type';
+            lab_AddressType.className = 'filterlabel';
+            div_AddressType.appendChild(lab_AddressType);
+            var reset_AddressType = document.createElement('div');
+            reset_AddressType.innerHTML = 'clear filter';
+            reset_AddressType.className = 'filterlabel';
+            reset_AddressType.onclick = function() {
+                var options = document.getElementById("sel_AddressType").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_AddressType.appendChild(reset_AddressType);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_GroupBoysCrew = document.createElement('div');
+            div_GroupBoysCrew.id = "div_GroupBoysCrew";
+            div_GroupBoysCrew.className= "filterselect";
+            document.getElementById("menu").appendChild(div_GroupBoysCrew);
+            sel_GroupBoysCrew = document.createElement('select');
+            sel_GroupBoysCrew.multiple = true;
+            sel_GroupBoysCrew.size = 7;
+            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
+            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
+            sel_GroupBoysCrew.onchange = function(){filterFunc()};
+            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
+            GroupBoysCrew_options_str  += '<option value="Country">Country</option>';
+            GroupBoysCrew_options_str  += '<option value="State">State</option>';
+            GroupBoysCrew_options_str  += '<option value="TBD">TBD</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
+            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
+            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
+            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
+            var lab_GroupBoysCrew = document.createElement('div');
+            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
+            lab_GroupBoysCrew.className = 'filterlabel';
+            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
+            var reset_GroupBoysCrew = document.createElement('div');
+            reset_GroupBoysCrew.innerHTML = 'clear filter';
+            reset_GroupBoysCrew.className = 'filterlabel';
+            reset_GroupBoysCrew.onclick = function() {
+                var options = document.getElementById("sel_GroupBoysCrew").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_GroupClass = document.createElement('div');
+            div_GroupClass.id = "div_GroupClass";
+            div_GroupClass.className= "filterselect";
+            document.getElementById("menu").appendChild(div_GroupClass);
+            sel_GroupClass = document.createElement('select');
+            sel_GroupClass.multiple = true;
+            sel_GroupClass.size = 6;
+            sel_GroupClass.id = "sel_GroupClass";
+            var GroupClass_options_str = "<option value='' unselected></option>";
+            sel_GroupClass.onchange = function(){filterFunc()};
+            GroupClass_options_str  += '<option value="Country">Country</option>';
+            GroupClass_options_str  += '<option value="Maria Regina Class of 1971">Maria Regina Class of 1971</option>';
+            GroupClass_options_str  += '<option value="NHP Class of 1971">NHP Class of 1971</option>';
+            GroupClass_options_str  += '<option value="NHP Class of 1971 - DECEASED">NHP Class of 1971 - DECEASED</option>';
+            GroupClass_options_str  += '<option value="NHP Class of 1972">NHP Class of 1972</option>';
+            GroupClass_options_str  += '<option value="State">State</option>';
+            sel_GroupClass.innerHTML = GroupClass_options_str;
+            div_GroupClass.appendChild(sel_GroupClass);
+            var lab_GroupClass = document.createElement('div');
+            lab_GroupClass.innerHTML = 'Group-Class';
+            lab_GroupClass.className = 'filterlabel';
+            div_GroupClass.appendChild(lab_GroupClass);
+            var reset_GroupClass = document.createElement('div');
+            reset_GroupClass.innerHTML = 'clear filter';
+            reset_GroupClass.className = 'filterlabel';
+            reset_GroupClass.onclick = function() {
+                var options = document.getElementById("sel_GroupClass").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_GroupClass.appendChild(reset_GroupClass);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_Name = document.createElement('div');
             div_Name.id = "div_Name";
             div_Name.className= "filterselect";
@@ -906,7 +1071,7 @@
             Name_options_str  += '<option value="Arizona (6)">Arizona (6)</option>';
             Name_options_str  += '<option value="Arkansas (1)">Arkansas (1)</option>';
             Name_options_str  += '<option value="Armband (Henkel), Abbe">Armband (Henkel), Abbe</option>';
-            Name_options_str  += '<option value="Atsalis, Louis">Atsalis, Louis</option>';
+            Name_options_str  += '<option value="Atsalis, Louis (Lou)Michael">Atsalis, Louis (Lou)Michael</option>';
             Name_options_str  += '<option value="Avellini, Robert (Bob)">Avellini, Robert (Bob)</option>';
             Name_options_str  += '<option value="Bader (Wise), Randi">Bader (Wise), Randi</option>';
             Name_options_str  += '<option value="Baierlein (Melvin), Barbara">Baierlein (Melvin), Barbara</option>';
@@ -931,7 +1096,7 @@
             Name_options_str  += '<option value="Bonnevie, John">Bonnevie, John</option>';
             Name_options_str  += '<option value="Bradford, Raymond">Bradford, Raymond</option>';
             Name_options_str  += '<option value="Broderick (Higgins), Anne">Broderick (Higgins), Anne</option>';
-            Name_options_str  += '<option value="Brown, Frederic (Fred)">Brown, Frederic (Fred)</option>';
+            Name_options_str  += '<option value="Brown, Frederick (Fred)">Brown, Frederick (Fred)</option>';
             Name_options_str  += '<option value="Browne (Schlegelmilch), Maryanne">Browne (Schlegelmilch), Maryanne</option>';
             Name_options_str  += '<option value="Buehler (Dick), Barbara">Buehler (Dick), Barbara</option>';
             Name_options_str  += '<option value="Bungarz, Richard">Bungarz, Richard</option>';
@@ -943,13 +1108,13 @@
             Name_options_str  += '<option value="Carini, Daniel">Carini, Daniel</option>';
             Name_options_str  += '<option value="Carlin (Hartlage), Eileen">Carlin (Hartlage), Eileen</option>';
             Name_options_str  += '<option value="Carroll, Donald">Carroll, Donald</option>';
-            Name_options_str  += '<option value="Carter, Leward">Carter, Leward</option>';
+            Name_options_str  += '<option value="Carter, Leward (Lee)">Carter, Leward (Lee)</option>';
             Name_options_str  += '<option value="Castoria, Daniel">Castoria, Daniel</option>';
             Name_options_str  += '<option value="Catranbone (Rebstock), Cheryl">Catranbone (Rebstock), Cheryl</option>';
             Name_options_str  += '<option value="Chao, Mabel">Chao, Mabel</option>';
             Name_options_str  += '<option value="Chmielewski (Dara), Helen">Chmielewski (Dara), Helen</option>';
             Name_options_str  += '<option value="Choinski, Joseph">Choinski, Joseph</option>';
-            Name_options_str  += '<option value="Christenson, Gary">Christenson, Gary</option>';
+            Name_options_str  += '<option value="Christenson, Gary (Beef)R">Christenson, Gary (Beef)R</option>';
             Name_options_str  += '<option value="Colamarino, Robert">Colamarino, Robert</option>';
             Name_options_str  += '<option value="Colefield, Steven">Colefield, Steven</option>';
             Name_options_str  += '<option value="Coleman, Paul A.">Coleman, Paul A.</option>';
@@ -996,8 +1161,8 @@
             Name_options_str  += '<option value="Figueredo, Fernando">Figueredo, Fernando</option>';
             Name_options_str  += '<option value="Filauro, Thomas">Filauro, Thomas</option>';
             Name_options_str  += '<option value="Flack (Henry), Joan">Flack (Henry), Joan</option>';
-            Name_options_str  += '<option value="Fliegal, Robert">Fliegal, Robert</option>';
-            Name_options_str  += '<option value="Florida (47)">Florida (47)</option>';
+            Name_options_str  += '<option value="Fliegel, Robert (Bob)">Fliegel, Robert (Bob)</option>';
+            Name_options_str  += '<option value="Florida (48)">Florida (48)</option>';
             Name_options_str  += '<option value="Frassanito, Elena">Frassanito, Elena</option>';
             Name_options_str  += '<option value="Friedel, Glenn">Friedel, Glenn</option>';
             Name_options_str  += '<option value="Frommer, Richard">Frommer, Richard</option>';
@@ -1051,7 +1216,6 @@
             Name_options_str  += '<option value="Kearney, Ann">Kearney, Ann</option>';
             Name_options_str  += '<option value="Kelly, Michael">Kelly, Michael</option>';
             Name_options_str  += '<option value="Kentucky (2)">Kentucky (2)</option>';
-            Name_options_str  += '<option value="Kick (Wright), Geraldine Patrice">Kick (Wright), Geraldine Patrice</option>';
             Name_options_str  += '<option value="Kizner, Leslie">Kizner, Leslie</option>';
             Name_options_str  += '<option value="Klueber, John (Lance)">Klueber, John (Lance)</option>';
             Name_options_str  += '<option value="Klupka (Kennelly), Ellen">Klupka (Kennelly), Ellen</option>';
@@ -1095,7 +1259,7 @@
             Name_options_str  += '<option value="Martone (Franklin), Cynthia Sue">Martone (Franklin), Cynthia Sue</option>';
             Name_options_str  += '<option value="Maryland (6)">Maryland (6)</option>';
             Name_options_str  += '<option value="Mascaro (Fasanelli), Janet">Mascaro (Fasanelli), Janet</option>';
-            Name_options_str  += '<option value="Massachusetts (7)">Massachusetts (7)</option>';
+            Name_options_str  += '<option value="Massachusetts (6)">Massachusetts (6)</option>';
             Name_options_str  += '<option value="Masson, Suzanne">Masson, Suzanne</option>';
             Name_options_str  += '<option value="Maxwell, Virginia">Maxwell, Virginia</option>';
             Name_options_str  += '<option value="Mazzeo, Walter">Mazzeo, Walter</option>';
@@ -1104,7 +1268,7 @@
             Name_options_str  += '<option value="Meades (Leyh), Eileen">Meades (Leyh), Eileen</option>';
             Name_options_str  += '<option value="Mendoza, Robert">Mendoza, Robert</option>';
             Name_options_str  += '<option value="Merdian, William">Merdian, William</option>';
-            Name_options_str  += '<option value="Messina (Jimenez), Joann">Messina (Jimenez), Joann</option>';
+            Name_options_str  += '<option value="Messina (Jimenez), Jo Ann">Messina (Jimenez), Jo Ann</option>';
             Name_options_str  += '<option value="Michigan (2)">Michigan (2)</option>';
             Name_options_str  += '<option value="Miller (Fischl), Joanne">Miller (Fischl), Joanne</option>';
             Name_options_str  += '<option value="Minch, Steven">Minch, Steven</option>';
@@ -1129,7 +1293,7 @@
             Name_options_str  += '<option value="Nevada (3)">Nevada (3)</option>';
             Name_options_str  += '<option value="New Jersey (9)">New Jersey (9)</option>';
             Name_options_str  += '<option value="New Mexico (1)">New Mexico (1)</option>';
-            Name_options_str  += '<option value="New York (133)">New York (133)</option>';
+            Name_options_str  += '<option value="New York (127)">New York (127)</option>';
             Name_options_str  += '<option value="Nicholas, William">Nicholas, William</option>';
             Name_options_str  += '<option value="Nocilla, Frank">Nocilla, Frank</option>';
             Name_options_str  += '<option value="North Carolina (6)">North Carolina (6)</option>';
@@ -1145,7 +1309,7 @@
             Name_options_str  += '<option value="Oosterom, Stephen">Oosterom, Stephen</option>';
             Name_options_str  += '<option value="Opyr, Linda">Opyr, Linda</option>';
             Name_options_str  += '<option value="Oster , Harold">Oster , Harold</option>';
-            Name_options_str  += '<option value="Ott, Steven (Steve) G.">Ott, Steven (Steve) G.</option>';
+            Name_options_str  += '<option value="Ott, Stephen">Ott, Stephen</option>';
             Name_options_str  += '<option value="Otto (Jones), Patricia">Otto (Jones), Patricia</option>';
             Name_options_str  += '<option value="Paar, James (Jimmy)">Paar, James (Jimmy)</option>';
             Name_options_str  += '<option value="Palenscar (Gaiser), Jeanne">Palenscar (Gaiser), Jeanne</option>';
@@ -1175,7 +1339,7 @@
             Name_options_str  += '<option value="Pow, Robert">Pow, Robert</option>';
             Name_options_str  += '<option value="Quinlan (Ward), Christine">Quinlan (Ward), Christine</option>';
             Name_options_str  += '<option value="Raab, Jane">Raab, Jane</option>';
-            Name_options_str  += '<option value="Raffetto, Patricia">Raffetto, Patricia</option>';
+            Name_options_str  += '<option value="Raffetto (Conway), Patricia (Pat)">Raffetto (Conway), Patricia (Pat)</option>';
             Name_options_str  += '<option value="Ragusa, John">Ragusa, John</option>';
             Name_options_str  += '<option value="Reciniello, Dorothy">Reciniello, Dorothy</option>';
             Name_options_str  += '<option value="Reis (Helfenstein), Deborah">Reis (Helfenstein), Deborah</option>';
@@ -1195,7 +1359,7 @@
             Name_options_str  += '<option value="Russo, Joseph">Russo, Joseph</option>';
             Name_options_str  += '<option value="Russo, Michael (Vito)">Russo, Michael (Vito)</option>';
             Name_options_str  += '<option value="Russo, William (Billy)">Russo, William (Billy)</option>';
-            Name_options_str  += '<option value="Salajka (Miller), Joan">Salajka (Miller), Joan</option>';
+            Name_options_str  += '<option value="Salajka (Miller), Joan (Joan)">Salajka (Miller), Joan (Joan)</option>';
             Name_options_str  += '<option value="Salmaggi, Henry">Salmaggi, Henry</option>';
             Name_options_str  += '<option value="Salvagionne (Moore), Doris">Salvagionne (Moore), Doris</option>';
             Name_options_str  += '<option value="Salvato, Paul">Salvato, Paul</option>';
@@ -1244,8 +1408,8 @@
             Name_options_str  += '<option value="Turko, Patricia">Turko, Patricia</option>';
             Name_options_str  += '<option value="Van Siclen, Jonathan">Van Siclen, Jonathan</option>';
             Name_options_str  += '<option value="Vesneski, Daniel">Vesneski, Daniel</option>';
-            Name_options_str  += '<option value="Victori, David">Victori, David</option>';
             Name_options_str  += '<option value="Virginia (6)">Virginia (6)</option>';
+            Name_options_str  += '<option value="Vitori, David">Vitori, David</option>';
             Name_options_str  += '<option value="Wallis, Thomas (Tommy)">Wallis, Thomas (Tommy)</option>';
             Name_options_str  += '<option value="Walters (Palecek), Mary Anne">Walters (Palecek), Mary Anne</option>';
             Name_options_str  += '<option value="Warren, Gail">Warren, Gail</option>';
@@ -1286,141 +1450,6 @@
                 filterFunc();
             };
             div_Name.appendChild(reset_Name);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_GroupClass = document.createElement('div');
-            div_GroupClass.id = "div_GroupClass";
-            div_GroupClass.className= "filterselect";
-            document.getElementById("menu").appendChild(div_GroupClass);
-            sel_GroupClass = document.createElement('select');
-            sel_GroupClass.multiple = true;
-            sel_GroupClass.size = 6;
-            sel_GroupClass.id = "sel_GroupClass";
-            var GroupClass_options_str = "<option value='' unselected></option>";
-            sel_GroupClass.onchange = function(){filterFunc()};
-            GroupClass_options_str  += '<option value="Country">Country</option>';
-            GroupClass_options_str  += '<option value="Maria Regina Class of 1971">Maria Regina Class of 1971</option>';
-            GroupClass_options_str  += '<option value="NHP Class of 1971">NHP Class of 1971</option>';
-            GroupClass_options_str  += '<option value="NHP Class of 1971 - DECEASED">NHP Class of 1971 - DECEASED</option>';
-            GroupClass_options_str  += '<option value="NHP Class of 1972">NHP Class of 1972</option>';
-            GroupClass_options_str  += '<option value="State">State</option>';
-            sel_GroupClass.innerHTML = GroupClass_options_str;
-            div_GroupClass.appendChild(sel_GroupClass);
-            var lab_GroupClass = document.createElement('div');
-            lab_GroupClass.innerHTML = 'Group-Class';
-            lab_GroupClass.className = 'filterlabel';
-            div_GroupClass.appendChild(lab_GroupClass);
-            var reset_GroupClass = document.createElement('div');
-            reset_GroupClass.innerHTML = 'clear filter';
-            reset_GroupClass.className = 'filterlabel';
-            reset_GroupClass.onclick = function() {
-                var options = document.getElementById("sel_GroupClass").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_GroupClass.appendChild(reset_GroupClass);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Deceased = document.createElement('div');
-            div_Deceased.id = "div_Deceased";
-            div_Deceased.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Deceased);
-            sel_Deceased = document.createElement('select');
-            sel_Deceased.multiple = true;
-            sel_Deceased.size = 3;
-            sel_Deceased.id = "sel_Deceased";
-            var Deceased_options_str = "<option value='' unselected></option>";
-            sel_Deceased.onchange = function(){filterFunc()};
-            Deceased_options_str  += '<option value="Deceased">Deceased</option>';
-            Deceased_options_str  += '<option value="N/A">N/A</option>';
-            Deceased_options_str  += '<option value="Still Alive & Well">Still Alive & Well</option>';
-            sel_Deceased.innerHTML = Deceased_options_str;
-            div_Deceased.appendChild(sel_Deceased);
-            var lab_Deceased = document.createElement('div');
-            lab_Deceased.innerHTML = 'Deceased?';
-            lab_Deceased.className = 'filterlabel';
-            div_Deceased.appendChild(lab_Deceased);
-            var reset_Deceased = document.createElement('div');
-            reset_Deceased.innerHTML = 'clear filter';
-            reset_Deceased.className = 'filterlabel';
-            reset_Deceased.onclick = function() {
-                var options = document.getElementById("sel_Deceased").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Deceased.appendChild(reset_Deceased);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_GroupBoysCrew = document.createElement('div');
-            div_GroupBoysCrew.id = "div_GroupBoysCrew";
-            div_GroupBoysCrew.className= "filterselect";
-            document.getElementById("menu").appendChild(div_GroupBoysCrew);
-            sel_GroupBoysCrew = document.createElement('select');
-            sel_GroupBoysCrew.multiple = true;
-            sel_GroupBoysCrew.size = 6;
-            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
-            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
-            sel_GroupBoysCrew.onchange = function(){filterFunc()};
-            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
-            GroupBoysCrew_options_str  += '<option value="Country">Country</option>';
-            GroupBoysCrew_options_str  += '<option value="State">State</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
-            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
-            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
-            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
-            var lab_GroupBoysCrew = document.createElement('div');
-            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
-            lab_GroupBoysCrew.className = 'filterlabel';
-            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
-            var reset_GroupBoysCrew = document.createElement('div');
-            reset_GroupBoysCrew.innerHTML = 'clear filter';
-            reset_GroupBoysCrew.className = 'filterlabel';
-            reset_GroupBoysCrew.onclick = function() {
-                var options = document.getElementById("sel_GroupBoysCrew").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_AddressType = document.createElement('div');
-            div_AddressType.id = "div_AddressType";
-            div_AddressType.className= "filterselect";
-            document.getElementById("menu").appendChild(div_AddressType);
-            sel_AddressType = document.createElement('select');
-            sel_AddressType.multiple = true;
-            sel_AddressType.size = 4;
-            sel_AddressType.id = "sel_AddressType";
-            var AddressType_options_str = "<option value='' unselected></option>";
-            sel_AddressType.onchange = function(){filterFunc()};
-            AddressType_options_str  += '<option value="Country">Country</option>';
-            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
-            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
-            AddressType_options_str  += '<option value="State">State</option>';
-            sel_AddressType.innerHTML = AddressType_options_str;
-            div_AddressType.appendChild(sel_AddressType);
-            var lab_AddressType = document.createElement('div');
-            lab_AddressType.innerHTML = 'Address Type';
-            lab_AddressType.className = 'filterlabel';
-            div_AddressType.appendChild(lab_AddressType);
-            var reset_AddressType = document.createElement('div');
-            reset_AddressType.innerHTML = 'clear filter';
-            reset_AddressType.className = 'filterlabel';
-            reset_AddressType.onclick = function() {
-                var options = document.getElementById("sel_AddressType").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_AddressType.appendChild(reset_AddressType);
         resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
         map.on("zoomend", function(){
             resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
