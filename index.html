@@ -19,9 +19,11 @@
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
-        #map {
-            width: 1164px;
-            height: 809px;
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
         </style>
         <title>Directory-NHP-@Master v02-QGIS2Web</title>
@@ -801,7 +803,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Group-Class": "str","Name": "str","State Code": "str","Address Type": "str","Deceased?": "str","Group-Boys-Crew": "str"};
+        var Filters = {"Deceased?": "str","Group-Class": "str","Group-Boys-Crew": "str","Address Type": "str","Name": "str","State Code": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -932,6 +934,38 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_Deceased = document.createElement('div');
+            div_Deceased.id = "div_Deceased";
+            div_Deceased.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Deceased);
+            sel_Deceased = document.createElement('select');
+            sel_Deceased.multiple = true;
+            sel_Deceased.size = 3;
+            sel_Deceased.id = "sel_Deceased";
+            var Deceased_options_str = "<option value='' unselected></option>";
+            sel_Deceased.onchange = function(){filterFunc()};
+            Deceased_options_str  += '<option value="NULL">NULL</option>';
+            Deceased_options_str  += '<option value="Deceased">Deceased</option>';
+            Deceased_options_str  += '<option value="N/A">N/A</option>';
+            sel_Deceased.innerHTML = Deceased_options_str;
+            div_Deceased.appendChild(sel_Deceased);
+            var lab_Deceased = document.createElement('div');
+            lab_Deceased.innerHTML = 'Deceased?';
+            lab_Deceased.className = 'filterlabel';
+            div_Deceased.appendChild(lab_Deceased);
+            var reset_Deceased = document.createElement('div');
+            reset_Deceased.innerHTML = 'clear filter';
+            reset_Deceased.className = 'filterlabel';
+            reset_Deceased.onclick = function() {
+                var options = document.getElementById("sel_Deceased").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Deceased.appendChild(reset_Deceased);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_GroupClass = document.createElement('div');
             div_GroupClass.id = "div_GroupClass";
             div_GroupClass.className= "filterselect";
@@ -965,6 +999,75 @@
                 filterFunc();
             };
             div_GroupClass.appendChild(reset_GroupClass);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_GroupBoysCrew = document.createElement('div');
+            div_GroupBoysCrew.id = "div_GroupBoysCrew";
+            div_GroupBoysCrew.className= "filterselect";
+            document.getElementById("menu").appendChild(div_GroupBoysCrew);
+            sel_GroupBoysCrew = document.createElement('select');
+            sel_GroupBoysCrew.multiple = true;
+            sel_GroupBoysCrew.size = 7;
+            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
+            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
+            sel_GroupBoysCrew.onchange = function(){filterFunc()};
+            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
+            GroupBoysCrew_options_str  += '<option value="Country">Country</option>';
+            GroupBoysCrew_options_str  += '<option value="State">State</option>';
+            GroupBoysCrew_options_str  += '<option value="TBD">TBD</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
+            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
+            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
+            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
+            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
+            var lab_GroupBoysCrew = document.createElement('div');
+            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
+            lab_GroupBoysCrew.className = 'filterlabel';
+            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
+            var reset_GroupBoysCrew = document.createElement('div');
+            reset_GroupBoysCrew.innerHTML = 'clear filter';
+            reset_GroupBoysCrew.className = 'filterlabel';
+            reset_GroupBoysCrew.onclick = function() {
+                var options = document.getElementById("sel_GroupBoysCrew").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_AddressType = document.createElement('div');
+            div_AddressType.id = "div_AddressType";
+            div_AddressType.className= "filterselect";
+            document.getElementById("menu").appendChild(div_AddressType);
+            sel_AddressType = document.createElement('select');
+            sel_AddressType.multiple = true;
+            sel_AddressType.size = 4;
+            sel_AddressType.id = "sel_AddressType";
+            var AddressType_options_str = "<option value='' unselected></option>";
+            sel_AddressType.onchange = function(){filterFunc()};
+            AddressType_options_str  += '<option value="Country">Country</option>';
+            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
+            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
+            AddressType_options_str  += '<option value="State">State</option>';
+            sel_AddressType.innerHTML = AddressType_options_str;
+            div_AddressType.appendChild(sel_AddressType);
+            var lab_AddressType = document.createElement('div');
+            lab_AddressType.innerHTML = 'Address Type';
+            lab_AddressType.className = 'filterlabel';
+            div_AddressType.appendChild(lab_AddressType);
+            var reset_AddressType = document.createElement('div');
+            reset_AddressType.innerHTML = 'clear filter';
+            reset_AddressType.className = 'filterlabel';
+            reset_AddressType.onclick = function() {
+                var options = document.getElementById("sel_AddressType").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_AddressType.appendChild(reset_AddressType);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_Name = document.createElement('div');
@@ -1440,107 +1543,6 @@
                 filterFunc();
             };
             div_StateCode.appendChild(reset_StateCode);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_AddressType = document.createElement('div');
-            div_AddressType.id = "div_AddressType";
-            div_AddressType.className= "filterselect";
-            document.getElementById("menu").appendChild(div_AddressType);
-            sel_AddressType = document.createElement('select');
-            sel_AddressType.multiple = true;
-            sel_AddressType.size = 4;
-            sel_AddressType.id = "sel_AddressType";
-            var AddressType_options_str = "<option value='' unselected></option>";
-            sel_AddressType.onchange = function(){filterFunc()};
-            AddressType_options_str  += '<option value="Country">Country</option>';
-            AddressType_options_str  += '<option value="Primary Address">Primary Address</option>';
-            AddressType_options_str  += '<option value="Secondary Address">Secondary Address</option>';
-            AddressType_options_str  += '<option value="State">State</option>';
-            sel_AddressType.innerHTML = AddressType_options_str;
-            div_AddressType.appendChild(sel_AddressType);
-            var lab_AddressType = document.createElement('div');
-            lab_AddressType.innerHTML = 'Address Type';
-            lab_AddressType.className = 'filterlabel';
-            div_AddressType.appendChild(lab_AddressType);
-            var reset_AddressType = document.createElement('div');
-            reset_AddressType.innerHTML = 'clear filter';
-            reset_AddressType.className = 'filterlabel';
-            reset_AddressType.onclick = function() {
-                var options = document.getElementById("sel_AddressType").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_AddressType.appendChild(reset_AddressType);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Deceased = document.createElement('div');
-            div_Deceased.id = "div_Deceased";
-            div_Deceased.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Deceased);
-            sel_Deceased = document.createElement('select');
-            sel_Deceased.multiple = true;
-            sel_Deceased.size = 3;
-            sel_Deceased.id = "sel_Deceased";
-            var Deceased_options_str = "<option value='' unselected></option>";
-            sel_Deceased.onchange = function(){filterFunc()};
-            Deceased_options_str  += '<option value="NULL">NULL</option>';
-            Deceased_options_str  += '<option value="Deceased">Deceased</option>';
-            Deceased_options_str  += '<option value="N/A">N/A</option>';
-            sel_Deceased.innerHTML = Deceased_options_str;
-            div_Deceased.appendChild(sel_Deceased);
-            var lab_Deceased = document.createElement('div');
-            lab_Deceased.innerHTML = 'Deceased?';
-            lab_Deceased.className = 'filterlabel';
-            div_Deceased.appendChild(lab_Deceased);
-            var reset_Deceased = document.createElement('div');
-            reset_Deceased.innerHTML = 'clear filter';
-            reset_Deceased.className = 'filterlabel';
-            reset_Deceased.onclick = function() {
-                var options = document.getElementById("sel_Deceased").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Deceased.appendChild(reset_Deceased);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_GroupBoysCrew = document.createElement('div');
-            div_GroupBoysCrew.id = "div_GroupBoysCrew";
-            div_GroupBoysCrew.className= "filterselect";
-            document.getElementById("menu").appendChild(div_GroupBoysCrew);
-            sel_GroupBoysCrew = document.createElement('select');
-            sel_GroupBoysCrew.multiple = true;
-            sel_GroupBoysCrew.size = 7;
-            sel_GroupBoysCrew.id = "sel_GroupBoysCrew";
-            var GroupBoysCrew_options_str = "<option value='' unselected></option>";
-            sel_GroupBoysCrew.onchange = function(){filterFunc()};
-            GroupBoysCrew_options_str  += '<option value="NULL">NULL</option>';
-            GroupBoysCrew_options_str  += '<option value="Country">Country</option>';
-            GroupBoysCrew_options_str  += '<option value="State">State</option>';
-            GroupBoysCrew_options_str  += '<option value="TBD">TBD</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys">The Boys</option>';
-            GroupBoysCrew_options_str  += '<option value="The Boys/The Crew">The Boys/The Crew</option>';
-            GroupBoysCrew_options_str  += '<option value="The Crew">The Crew</option>';
-            sel_GroupBoysCrew.innerHTML = GroupBoysCrew_options_str;
-            div_GroupBoysCrew.appendChild(sel_GroupBoysCrew);
-            var lab_GroupBoysCrew = document.createElement('div');
-            lab_GroupBoysCrew.innerHTML = 'Group-Boys-Crew';
-            lab_GroupBoysCrew.className = 'filterlabel';
-            div_GroupBoysCrew.appendChild(lab_GroupBoysCrew);
-            var reset_GroupBoysCrew = document.createElement('div');
-            reset_GroupBoysCrew.innerHTML = 'clear filter';
-            reset_GroupBoysCrew.className = 'filterlabel';
-            reset_GroupBoysCrew.onclick = function() {
-                var options = document.getElementById("sel_GroupBoysCrew").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_GroupBoysCrew.appendChild(reset_GroupBoysCrew);
         resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
         map.on("zoomend", function(){
             resetLabels([layer_MasterStateTotals_6,layer_MasterClustered_7,layer_MasterwNames_8]);
